@@ -75,8 +75,8 @@ class Board:
             self.board[piece.row][piece.col] = 0
 
     def winner(self):
-        print("red_left: " + str(self.red_left))
-        print("white_left: " + str(self.white_left))
+        # print("red_left: " + str(self.red_left))
+        # print("white_left: " + str(self.white_left))
         if self.red_left <= 0:
             return BLACK
         elif self.white_left <= 0:
@@ -117,6 +117,15 @@ class Board:
             moves.update(self._vertical(row + 1, min(row + 3, ROWS), 1, piece.color, straight_down)) #DOWN
             moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
             moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
+        print("piece: " + str(piece.row) + ", " + str(piece.col) + "\tmoves: " + str(moves))
+
+        return moves
+
+    def get_all_valid_moves(self):
+        black_pieces = self.get_all_pieces(BLACK)
+        red_pieces = self.get_all_pieces(RED)
+
+        moves = self.get_valid_moves(black_pieces + red_pieces)
 
         return moves
 
