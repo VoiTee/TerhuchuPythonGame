@@ -5,7 +5,7 @@ class Board:
     def __init__(self):
         self.board = []
         #self.selected_piece = None
-        self.red_left = self.white_left = 8
+        self.red_left = self.white_left = 10
         self.red_kings = self.white_kings = 0
         self.create_board()
 
@@ -68,9 +68,15 @@ class Board:
 
     def remove(self, pieces):
         for piece in pieces:
+            if piece.color == RED:
+                self.red_left = self.red_left - 1
+            elif piece.color == BLACK:
+                self.white_left = self.white_left - 1
             self.board[piece.row][piece.col] = 0
 
     def winner(self):
+        print("red_left: " + str(self.red_left))
+        print("white_left: " + str(self.white_left))
         if self.red_left <= 0:
             return BLACK
         elif self.white_left <= 0:
