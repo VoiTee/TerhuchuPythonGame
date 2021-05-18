@@ -1,7 +1,9 @@
 import pygame
-from gamefiles.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED
+from gamefiles.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, BLACK
 from gamefiles.game import Game
 from gamefiles.board import Board
+from minimax.minimax import minimax
+
 FPS = 60
 
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -24,6 +26,14 @@ def main():
     while run:
         clock.tick(FPS)
 
+        if game.turn == BLACK:
+            value, new_board = minimax(game.get_board(), 5, BLACK, game)
+            game.ai_move(new_board)
+
+        if game.winner() != None:
+            print(game.winner())
+            run = False
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -32,12 +42,7 @@ def main():
                 row ,col = get_row_col_from_mouse(pos)
                 game.select(row,col)
 
-
-
                 pass
         game.update()
-
     pygame.quit()
-
-
 main()

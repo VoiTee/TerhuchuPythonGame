@@ -1,8 +1,7 @@
 import pygame
-from .constants import RED, WHITE, SQUARE_SIZE, GREY
+from .constants import RED, WHITE, SQUARE_SIZE, GREY, BLACK
 
 class Piece:
-
     PADDING = 15
     OUTLINE = 2
 
@@ -12,8 +11,6 @@ class Piece:
         self.color = color
         self.king = False
         #self.selected = False
-
-
 
         self.x = 0
         self.y = 0
@@ -30,9 +27,8 @@ class Piece:
 
     def draw(self, win):
         radius = SQUARE_SIZE//2 - self.PADDING
-        pygame.draw.circle(win, GREY, (self.x, self.y), radius + self.OUTLINE)
+        # pygame.draw.circle(win, GREY, (self.x, self.y), radius + self.OUTLINE)
         pygame.draw.circle(win, self.color, (self.x, self.y), radius)
-
 
     def move(self, row, col):
         self.row = row

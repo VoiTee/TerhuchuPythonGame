@@ -14,31 +14,43 @@ class Board:
         win.fill(BLACK)
         for row in range(ROWS):
             for col in range(COLS):
-                #pygame.draw.rect(win,RED, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
-                pygame.draw.circle(win, GREY, (SQUARE_SIZE * row + SQUARE_SIZE // 2, SQUARE_SIZE * col + SQUARE_SIZE // 2), SQUARE_SIZE//2)
+                # pygame.draw.rect(win,RED, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                if row % 2:
+                    if col % 2:
+                        pygame.draw.rect(win,GREY, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                    else:
+                        pygame.draw.rect(win,WHITE, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                else:
+                    if col % 2:
+                        pygame.draw.rect(win,WHITE, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                    else:
+                        pygame.draw.rect(win,GREY, (row*SQUARE_SIZE, col*SQUARE_SIZE, SQUARE_SIZE, SQUARE_SIZE))
+                # pygame.draw.circle(win, GREY, (SQUARE_SIZE * row + SQUARE_SIZE // 2, SQUARE_SIZE * col + SQUARE_SIZE // 2), SQUARE_SIZE//2)
+    def evaluate(self):
+        return self.white_left - self.red_left
+
+    def get_all_pieces(self, color):
+        pieces = []
+        for row in self.board:
+            for piece in row:
+                if piece != 0 and piece.color == color:
+                    pieces.append(piece)
+        return pieces
 
     def move(self, piece, row, col):
         self.board[piece.row][piece.col], self.board[row][col] = self.board[row][col], self.board[piece.row][piece.col]
         piece.move(row,col)
-        if row == ROWS - 1 or row ==0:
-            piece.make_king()
-            if piece.color == WHITE:
-                self.white_kings += 1
-            else:
-                self.red_kings =+ 1
-
         pass
 
     def get_piece(self, row, col):
         return self.board[row][col]
-
 
     def create_board(self):
         for row in range(ROWS):
             self.board.append([])
             for col in range(COLS):
                 if row < 2:
-                    self.board[row].append(Piece(row, col, WHITE))
+                    self.board[row].append(Piece(row, col, BLACK))
                 elif row > 2:
                     self.board[row].append(Piece(row, col, RED))
                 else:
@@ -58,6 +70,13 @@ class Board:
         for piece in pieces:
             self.board[piece.row][piece.col] = 0
 
+    def winner(self):
+        if self.red_left <= 0:
+            return BLACK
+        elif self.white_left <= 0:
+            return RED
+        return None
+
     def get_valid_moves(self, piece):
         moves = {}
         straight_up = piece.col
@@ -69,7 +88,7 @@ class Board:
         row = piece.row
         col = piece.col
 
-        if piece.color == RED or piece.king:
+        if piece.color == RED:
             #DIAG UP
             moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, diag_left))
             moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, diag_right))
@@ -81,7 +100,7 @@ class Board:
             moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
             moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
 
-        if piece.color == WHITE or piece.king:
+        if piece.color == BLACK:
             #DIAG UP
             moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, diag_left))
             moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, diag_right))
