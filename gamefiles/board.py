@@ -117,7 +117,7 @@ class Board:
             moves.update(self._vertical(row + 1, min(row + 3, ROWS), 1, piece.color, straight_down)) #DOWN
             moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
             moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
-        print("piece: " + str(piece.row) + ", " + str(piece.col) + "\tmoves: " + str(moves))
+        # print("piece: " + str(piece.row) + ", " + str(piece.col) + "\tmoves: " + str(moves))
 
         return moves
 
@@ -125,6 +125,8 @@ class Board:
         black_pieces = self.get_all_pieces(BLACK)
         red_pieces = self.get_all_pieces(RED)
 
+        # print("black_pieces: " + str(black_pieces))
+        # print("red_pieces: " + str(red_pieces))
         moves = self.get_valid_moves(black_pieces + red_pieces)
 
         return moves

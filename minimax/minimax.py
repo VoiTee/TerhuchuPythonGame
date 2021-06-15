@@ -41,6 +41,7 @@ def get_all_moves(board, color, game):
     moves = []
 
     for piece in board.get_all_pieces(color):
+        # print("piece: " + str(piece.row) + ", " + str(piece.col))
         valid_moves = board.get_valid_moves(piece)
         for move, skip in valid_moves.items():
             draw_moves(game, board, piece)

@@ -3,6 +3,7 @@ from gamefiles.constants import WIDTH, HEIGHT, SQUARE_SIZE, RED, BLACK
 from gamefiles.game import Game
 from gamefiles.board import Board
 from minimax.minimax import minimax
+from mcts.mcts import MonteCarloTreeSearchNode
 
 FPS = 60
 
@@ -16,6 +17,10 @@ def get_row_col_from_mouse(pos):
     return row, col
 
 def main():
+    # game_test = Game(WIN)
+    # root = MonteCarloTreeSearchNode(color = BLACK, board = game_test.get_board())
+    # selected_node = root.best_action()
+
     run = True
     clock = pygame.time.Clock()
     game = Game(WIN)
@@ -27,8 +32,11 @@ def main():
         clock.tick(FPS)
 
         if game.turn == BLACK:
-            value, new_board = minimax(game.get_board(), 5, BLACK, game)
-            game.ai_move(new_board)
+            root = MonteCarloTreeSearchNode(color = BLACK, board = game.get_board())
+            selected_node = root.best_action()
+            game.ai_move()
+            # value, new_board = minimax(game.get_board(), 5, BLACK, game)
+            # game.ai_move(new_board)
 
         if game.winner() != None:
             print(game.winner())
