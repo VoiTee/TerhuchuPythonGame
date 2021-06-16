@@ -43,7 +43,9 @@ def get_all_moves(board, color, game):
     for piece in board.get_all_pieces(color):
         # print("piece: " + str(piece.row) + ", " + str(piece.col))
         valid_moves = board.get_valid_moves(piece)
+        print("valid_moves: " + str(valid_moves))
         for move, skip in valid_moves.items():
+            print("skip: " + str(skip))
             draw_moves(game, board, piece)
             temp_board = deepcopy(board)
             temp_piece = temp_board.get_piece(piece.row, piece.col)

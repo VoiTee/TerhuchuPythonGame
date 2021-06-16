@@ -74,6 +74,13 @@ class Board:
                 self.white_left = self.white_left - 1
             self.board[piece.row][piece.col] = 0
 
+    def mcts_remove(self, piece):
+        if piece.color == RED:
+            self.red_left = self.red_left - 1
+        elif piece.color == BLACK:
+            self.white_left = self.white_left - 1
+        self.board[piece.row][piece.col] = 0
+
     def winner(self):
         # print("red_left: " + str(self.red_left))
         # print("white_left: " + str(self.white_left))
@@ -118,6 +125,11 @@ class Board:
             moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
             moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
         # print("piece: " + str(piece.row) + ", " + str(piece.col) + "\tmoves: " + str(moves))
+
+        for x, y in list(moves):
+            if x == -1 or y == -1:
+                key = (x, y)
+                del moves[key]
 
         return moves
 
