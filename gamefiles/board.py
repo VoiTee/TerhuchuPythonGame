@@ -101,35 +101,16 @@ class Board:
         row = piece.row
         col = piece.col
 
-        if piece.color == RED:
-            #DIAG UP
-            moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, diag_left))
-            moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, diag_right))
-            #DIAG DOWN
-            moves.update(self._diagonal_left(row + 1, min(row + 3, ROWS), 1, piece.color, diag_left))
-            moves.update(self._diagonal_right(row + 1, min(row + 3, ROWS), 1, piece.color, diag_right))
-            moves.update(self._vertical(row - 1, min(row - 3, ROWS), -1, piece.color, straight_up)) #UP
-            moves.update(self._vertical(row + 1, min(row + 3, ROWS), 1, piece.color, straight_down)) #DOWN
-            moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
-            moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
-
-        if piece.color == BLACK:
-            #DIAG UP
-            moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, diag_left))
-            moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, diag_right))
-            #DIAG DOWN
-            moves.update(self._diagonal_left(row + 1, min(row + 3, ROWS), 1, piece.color, diag_left))
-            moves.update(self._diagonal_right(row + 1, min(row + 3, ROWS), 1, piece.color, diag_right))
-            moves.update(self._vertical(row - 1, min(row - 3, ROWS), -1, piece.color, straight_up)) #UP
-            moves.update(self._vertical(row + 1, min(row + 3, ROWS), 1, piece.color, straight_down)) #DOWN
-            moves.update(self._horizontal(col - 1, min(col - 3, COLS), -1, piece.color, row)) #LEFT
-            moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
-        # print("piece: " + str(piece.row) + ", " + str(piece.col) + "\tmoves: " + str(moves))
-
-        for x, y in list(moves):
-            if x == -1 or y == -1:
-                key = (x, y)
-                del moves[key]
+        #DIAG UP
+        moves.update(self._diagonal_left(row - 1, max(row - 3, -1), -1, piece.color, diag_left))
+        moves.update(self._diagonal_right(row - 1, max(row - 3, -1), -1, piece.color, diag_right))
+        #DIAG DOWN
+        moves.update(self._diagonal_left(row + 1, min(row + 3, ROWS), 1, piece.color, diag_left))
+        moves.update(self._diagonal_right(row + 1, min(row + 3, ROWS), 1, piece.color, diag_right))
+        moves.update(self._vertical(row - 1, min(row - 3, -1), -1, piece.color, straight_up)) #UP
+        moves.update(self._vertical(row + 1, min(row + 3, ROWS), 1, piece.color, straight_down)) #DOWN
+        moves.update(self._horizontal(col - 1, min(col - 3, -1), -1, piece.color, row)) #LEFT
+        moves.update(self._horizontal(col + 1, min(col + 3, COLS), +1, piece.color, row)) #RIGHT
 
         return moves
 
@@ -161,12 +142,12 @@ class Board:
                 else:
                     moves[(r,vert)] = last
 
-                if last:
-                    if step == -1:
-                        col = max(r - 3, 0)
-                    else:
-                        col = min(r + 3, ROWS)
-                    moves.update(self._vertical(col + step, stop, step, color, vert, skipped=last))
+                # if last:
+                #     if step == -1:
+                #         col = max(r - 3, 0)
+                #     else:
+                #         col = min(r + 3, ROWS)
+                #     moves.update(self._vertical(col + step, stop, step, color, vert, skipped=last))
                 break
             elif current.color == color:
                 break
@@ -194,12 +175,12 @@ class Board:
                 else:
                     moves[(vert,r)] = last
 
-                if last:
-                    if step == -1:
-                        col = max(vert - 3, 0)
-                    else:
-                        col = min(vert + 3, COLS)
-                    moves.update(self._horizontal(col + step, stop, step, color, vert, skipped=last))
+                # if last:
+                #     if step == -1:
+                #         col = max(vert - 3, 0)
+                #     else:
+                #         col = min(vert + 3, COLS)
+                #     moves.update(self._horizontal(col + step, stop, step, color, vert, skipped=last))
                 break
             elif current.color == color:
                 break
@@ -225,13 +206,13 @@ class Board:
                 else:
                     moves[(r, left)] = last
 
-                if last:
-                    if step == -1:
-                        row = max(r - 3, 0)
-                    else:
-                        row = min(r + 3, ROWS)
-                    moves.update(self._diagonal_left(r + step, row, step, color, left - 1, skipped=last))
-                    moves.update(self._diagonal_right(r + step, row, step, color, left + 1, skipped=last))
+                # if last:
+                #     if step == -1:
+                #         row = max(r - 3, 0)
+                #     else:
+                #         row = min(r + 3, ROWS)
+                #     moves.update(self._diagonal_left(r + step, row, step, color, left - 1, skipped=last))
+                #     moves.update(self._diagonal_right(r + step, row, step, color, left + 1, skipped=last))
                 break
             elif current.color == color:
                 break
@@ -258,13 +239,13 @@ class Board:
                 else:
                     moves[(r, right)] = last
 
-                if last:
-                    if step == -1:
-                        row = max(r - 3, 0)
-                    else:
-                        row = min(r + 3, ROWS)
-                    moves.update(self._diagonal_left(r + step, row, step, color, right - 1, skipped=last))
-                    moves.update(self._diagonal_right(r + step, row, step, color, right + 1, skipped=last))
+                # if last:
+                #     if step == -1:
+                #         row = max(r - 3, 0)
+                #     else:
+                #         row = min(r + 3, ROWS)
+                #     moves.update(self._diagonal_left(r + step, row, step, color, right - 1, skipped=last))
+                #     moves.update(self._diagonal_right(r + step, row, step, color, right + 1, skipped=last))
                 break
             elif current.color == color:
                 break

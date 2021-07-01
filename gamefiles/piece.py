@@ -36,4 +36,9 @@ class Piece:
         self.calc_pos()
 
     def __repr__(self):
-        return str(self.color)
+        if self.color == RED:
+            return "RED"
+        elif self.color == BLACK:
+            return "BLACK"
+        else:
+            return str(self.color)
