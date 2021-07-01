@@ -36,9 +36,13 @@ def main():
             temp_board = deepcopy(board)
             root = MonteCarloTreeSearchNode(color = BLACK, board = temp_board)
             selected_node = root.best_action()
-            print(board.board)
+            print("\n\n\nBefore MCTS: ")
+            for xs in board.board:
+                print(" ".join(map(str, xs)))
             board = selected_node.board
-            print(board.board)
+            print("\nAfter MCTS: ")
+            for xs in board.board:
+                print(" ".join(map(str, xs)))
             print(selected_node)
             game.ai_move()
             # value, new_board = minimax(game.get_board(), 5, BLACK, game)

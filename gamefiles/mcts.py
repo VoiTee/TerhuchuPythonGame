@@ -98,23 +98,25 @@ class MonteCarloTreeSearchNode():
             color, self.board, parent=self, parent_action=action)
 
         self.children.append(child_node)
+        print(self.children)
 
         return child_node 
 
     def is_terminal_node(self):
+        print(self.board.winner())
         return self.board.winner()
 
     def rollout(self):
-        print("self.board: " + str(self.board))
+        # print("self.board: " + str(self.board))
         current_rollout_board = self.board
 
         counter = 30
-        while current_rollout_board.winner() == None or counter > 0:
-            print("THEY SEE ME ROLLIN: " + str(current_rollout_board.board))
+        while current_rollout_board.winner() == None and counter > 0:
+            # print("THEY SEE ME ROLLIN: " + str(current_rollout_board.board))
             possible_moves = self.get_legal_actions(current_rollout_board)
 
             key, move = self.rollout_policy(possible_moves)
-            print("key: " + str(key) + " move: " + str(move))
+            # print("key: " + str(key) + " move: " + str(move))
             all_pieces = self._get_all_pieces(self.board)
             skip = self._is_skip(key, move)
             for piece in all_pieces:
@@ -133,26 +135,30 @@ class MonteCarloTreeSearchNode():
         return current_rollout_board.winner()
 
     def backpropagate(self, result):
+        print("cofansko")
         self._number_of_visits += 1.
         self._results[result] += 1.
         if self.parent:
             self.parent.backpropagate(result)
 
     def is_fully_expanded(self):
+        print("is_fully_expanded: " + str(len(self._untried_actions.keys())))
         return len(self._untried_actions.keys()) == 0
 
     def best_child(self, c_param=0.1):
         choices_weights = [(c.q() / c.n()) + c_param * np.sqrt((2 * np.log(self.n()) / c.n())) for c in self.children]
+        print("choices_weights " + str(choices_weights))
+        print(self.children[np.argmax(choices_weights)])
         return self.children[np.argmax(choices_weights)]
 
     def rollout_policy(self, possible_moves):
         keys = list(possible_moves.keys())
         chosen_key = keys[np.random.randint(len(possible_moves.keys()))]
-        print("chosen_key: " + str(chosen_key) + "possible_moves: " + str(possible_moves))
+        # print("chosen_key: " + str(chosen_key) + "possible_moves: " + str(possible_moves))
         chosen_piece = possible_moves[chosen_key]
-        print("chosen_piece: " + str(chosen_piece))
+        # print("chosen_piece: " + str(chosen_piece))
         # count = sum(len(v) for v in chosen_piece.values())
-        
+
         chosen_move = []
         for i in range(len(chosen_piece)):
             if self._is_skip(chosen_key, chosen_piece[i]):
@@ -165,7 +171,7 @@ class MonteCarloTreeSearchNode():
 
     def _tree_policy(self):
         current_node = self
-        while not current_node.is_terminal_node():
+        while current_node.is_terminal_node() != RED and current_node.is_terminal_node() != BLACK:
             if not current_node.is_fully_expanded():
                 return current_node.expand()
             else:
@@ -173,7 +179,7 @@ class MonteCarloTreeSearchNode():
         return current_node
 
     def best_action(self):
-        simulation_no = 1
+        simulation_no = 5
         for i in range(simulation_no):
             v = self._tree_policy()
             reward = v.rollout()
